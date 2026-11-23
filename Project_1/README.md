@@ -11,4 +11,5 @@ and an Amazon Linux 2023 EC2 instance that installs Apache via user_data.
     terraform destroy
 
 ## Screenshot
-See screenshot.png
+<img width="1906" height="797" alt="Screenshot 2026-11-22 153137" src="https://github.com/user-attachments/assets/1ed9af74-0a67-495d-888f-f5ef12a2c692" />
+
