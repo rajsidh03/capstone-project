@@ -1,0 +1,19 @@
+#!/bin/bash
+# Runs once on first boot (Amazon Linux 2023).
+# Creates a CPU-burning script and schedules it to start after a delay.
+set -eux
+
+cat > /usr/local/bin/generate-load.sh <<'LOAD'
+#!/bin/bash
+# Keeps every CPU core 100% busy for N seconds
+DURATION=${load_duration_seconds}
+for i in $(seq "$(nproc)"); do
+  timeout "$DURATION" sh -c 'while :; do :; done' &
+done
+wait
+LOAD
+
+chmod +x /usr/local/bin/generate-load.sh
+
+# Start the load automatically after the delay (no SSH needed)
+systemd-run --on-active=${load_delay_seconds}s --unit=generate-load /usr/local/bin/generate-load.sh
