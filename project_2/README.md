@@ -11,4 +11,5 @@ and uploads index.html and error.html.
     terraform destroy
 
 ## Screenshot
-See screenshot.png
+![Uploading Screenshot 2026-11-23 124604.png…]()
+
