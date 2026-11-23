@@ -1,0 +1,45 @@
+IAM user:    p4-s3-readonly-user-ff338d5b
+User ARN:    arn:aws:iam::590507089733:user/p4-s3-readonly-user-ff338d5b
+Test bucket: p4-test-bucket-ff338d5b
+Date:        Mon, Nov 23, 2026  8:58:43 PM
+
+===== 1. Policies attached to the user =====
+------------------------------------------------------------------------------
+|                          ListAttachedUserPolicies                          |
++----------------------------------------------------------------------------+
+||                             AttachedPolicies                             ||
+|+------------+-------------------------------------------------------------+|
+||  PolicyArn |  arn:aws:iam::590507089733:policy/p4-iam-s3-read-ff338d5b   ||
+||  PolicyName|  p4-iam-s3-read-ff338d5b                                    ||
+|+------------+-------------------------------------------------------------+|
+
+===== 2. The policy document =====
+{
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::p4-test-bucket-ff338d5b/*",
+                "arn:aws:s3:::p4-test-bucket-ff338d5b"
+            ],
+            "Sid": "S3ReadOnlyTestBucket"
+        }
+    ],
+    "Version": "2012-10-17"
+}
+
+===== 3. IAM policy simulator: what may this user do? =====
+ACTION                   RESOURCE                                             EXPECTED      RESULT
+s3:GetObject             arn:aws:s3:::p4-test-bucket-ff338d5b/hello.txt       allowed       explicitDeny
+s3:ListBucket            arn:aws:s3:::p4-test-bucket-ff338d5b                 allowed       explicitDeny
+s3:PutObject             arn:aws:s3:::p4-test-bucket-ff338d5b/upload-test.txt implicitDeny  explicitDeny
+s3:DeleteObject          arn:aws:s3:::p4-test-bucket-ff338d5b/hello.txt       implicitDeny  explicitDeny
+s3:ListAllMyBuckets      *                                                    implicitDeny  explicitDeny
+ec2:DescribeInstances    *                                                    implicitDeny  explicitDeny
+
+Done. 'allowed' = permitted by the policy. 'implicitDeny' = not permitted.
