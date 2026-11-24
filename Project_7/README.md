@@ -9,3 +9,8 @@ on every push and pull request that changes this folder.
     terraform fmt -check -recursive
     terraform init -backend=false
     terraform validate
+
+<img width="1898" height="791" alt="Screenshot 2026-11-24 091527" src="https://github.com/user-attachments/assets/fd4ff0e4-4afc-4036-9a1a-eb337bd90ecc" />
+
+<img width="1904" height="790" alt="Screenshot 2026-11-24 091618" src="https://github.com/user-attachments/assets/b135fd50-300a-4882-892a-c9da59f73fbd" />
+
