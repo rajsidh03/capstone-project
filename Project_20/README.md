@@ -15,7 +15,11 @@ terraform apply
 terraform output alb_url
 ```
 Refresh the URL: the instance ID alternates between the two servers.
+<img width="1911" height="945" alt="Screenshot 2026-11-24 231839" src="https://github.com/user-attachments/assets/48730f32-f0f6-411c-abba-ffe56c5dcbd4" />
+<img width="1911" height="935" alt="Screenshot 2026-11-24 231853" src="https://github.com/user-attachments/assets/cb1a9f8c-ff5d-45e9-ba43-d680e16efcc9" />
+
+<img width="1914" height="845" alt="Screenshot 2026-11-24 232141" src="https://github.com/user-attachments/assets/6ea0d628-6019-4840-b98c-39f1f138a1c8" />
 
 
 
-
+<img width="1910" height="839" alt="Screenshot 2026-11-24 232632" src="https://github.com/user-attachments/assets/1629c841-c058-4073-8b3d-6d368de8a3b3" />
