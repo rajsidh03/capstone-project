@@ -11,10 +11,9 @@ log events by level (INFO, WARN, ERROR) using metric filters.
     terraform destroy
 
 ## Screenshots
-![Dashboard](<img width="1912" height="877" alt="Screenshot 2026-11-24 195822" src="https://github.com/user-attachments/assets/a8f01860-8cae-4305-b700-25fa7300b590" />
-)
-![Logs](<img width="1905" height="889" alt="Screenshot 2026-11-24 195953" src="https://github.com/user-attachments/assets/c4aaea3f-0ced-4ad7-865c-7498aa2dfc70" />
-)
+<img width="1905" height="889" alt="Screenshot 2026-11-24 195953" src="https://github.com/user-attachments/assets/330c12e1-5d8a-4143-a4f8-38a560c0c70b" />
+<img width="1912" height="877" alt="Screenshot 2026-11-24 195822" src="https://github.com/user-attachments/assets/f7a48ebd-2b5e-490d-8a34-ac0df13ccb44" />
+
 
 ## Note
 The console login cannot run Logs Insights queries, so the dashboard uses
