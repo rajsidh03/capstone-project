@@ -16,8 +16,8 @@ IAM role can only write to that one bucket.
 Use `0 2 * * *` for a daily 02:00 backup.
 
 ## Screenshots
-![Backup files in S3](screenshots/backup-listing.png)
-![Cron job](screenshots/cron-job.png)
+<img width="1908" height="983" alt="Screenshot 2026-11-24 230032" src="https://github.com/user-attachments/assets/75080f7b-0cf7-40eb-886c-13664c674966" />
+
 
 ## Note
 The console login cannot list the bucket, so the backup files are shown from
