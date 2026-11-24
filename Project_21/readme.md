@@ -17,3 +17,4 @@ terraform init
 terraform apply
 terraform output dashboard_url
 ```
+<img width="1903" height="789" alt="Screenshot 2026-11-24 235400" src="https://github.com/user-attachments/assets/3133454d-8c0b-4e85-a00a-2a6d35bc64e7" />
