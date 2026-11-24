@@ -1,0 +1,57 @@
+#!/bin/bash
+# Runs once on first boot (Amazon Linux 2023)
+set -eux
+
+# ---- cron ----
+dnf install -y cronie
+systemctl enable --now crond
+
+# ---- a fake application that writes a log line every 5 seconds ----
+cat > /usr/local/bin/p19-logger.sh <<'LOGGER'
+#!/bin/bash
+i=0
+while true; do
+  i=$((i+1))
+  echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) INFO app: request processed id=$i" >> /var/log/p19-app.log
+  sleep 5
+done
+LOGGER
+chmod +x /usr/local/bin/p19-logger.sh
+
+cat > /etc/systemd/system/p19-logger.service <<'UNIT'
+[Unit]
+Description=Fake application that writes logs
+
+[Service]
+ExecStart=/usr/local/bin/p19-logger.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+systemctl daemon-reload
+systemctl enable --now p19-logger
+
+# ---- the backup script: compress the logs and upload them to S3 ----
+cat > /usr/local/bin/p19-backup.sh <<'BACKUP'
+#!/bin/bash
+set -euo pipefail
+BUCKET="${bucket_name}"
+REGION="${region}"
+STAMP=$(date -u +%Y%m%dT%H%M%SZ)
+DAY=$(date -u +%Y/%m/%d)
+ARCHIVE="/tmp/logs-$STAMP.tar.gz"
+WORK=$(mktemp -d)
+
+cp /var/log/p19-app.log /var/log/cloud-init-output.log "$WORK"/
+tar -czf "$ARCHIVE" -C "$WORK" .
+aws s3 cp "$ARCHIVE" "s3://$BUCKET/backups/$DAY/logs-$STAMP.tar.gz" --region "$REGION"
+rm -rf "$WORK" "$ARCHIVE"
+echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) backup ok: logs-$STAMP.tar.gz"
+BACKUP
+chmod +x /usr/local/bin/p19-backup.sh
+
+# ---- the cron job: every minute (use "0 2 * * *" for a daily 02:00 backup) ----
+echo "* * * * * root /usr/local/bin/p19-backup.sh >> /var/log/p19-backup.log 2>&1" > /etc/cron.d/p19-backup
+chmod 644 /etc/cron.d/p19-backup
