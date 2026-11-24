@@ -1,0 +1,48 @@
+name: P12 Terraform Plan
+
+on:
+  push:
+    paths:
+      - "Project_12/**"
+      - ".github/workflows/p12-terraform-plan.yml"
+  workflow_dispatch:
+
+jobs:
+  plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Project_12
+
+    env:
+      AWS_ACCESS_KEY_ID: dummy
+      AWS_SECRET_ACCESS_KEY: dummy
+      AWS_DEFAULT_REGION: ap-south-1
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform plan
+        run: terraform plan -input=false -no-color -var ci_mode=true -out=tfplan
+
+      - name: Save readable plan
+        run: terraform show -no-color tfplan > plan.txt
+
+      - name: Upload plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: |
+            Project_12/tfplan
+            Project_12/plan.txt
