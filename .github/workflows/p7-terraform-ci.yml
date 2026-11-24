@@ -1,0 +1,36 @@
+name: P7 Terraform CI
+
+on:
+  push:
+    paths:
+      - "Project_7/**"
+      - ".github/workflows/p7-terraform-ci.yml"
+  pull_request:
+    paths:
+      - "Project_7/**"
+      - ".github/workflows/p7-terraform-ci.yml"
+
+jobs:
+  validate:
+    name: Terraform fmt and validate
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Project_7
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform format check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init (no backend)
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        run: terraform validate
