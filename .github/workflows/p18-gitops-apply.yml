@@ -1,0 +1,78 @@
+name: P18 GitOps Apply
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Project_18/**"
+      - ".github/workflows/p18-gitops-apply.yml"
+  pull_request:
+    paths:
+      - "Project_18/**"
+      - ".github/workflows/p18-gitops-apply.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Project_18
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform fmt and validate
+        run: |
+          terraform fmt -check
+          terraform validate
+
+      - name: Terraform plan
+        run: terraform plan -input=false -no-color -out=tfplan
+
+      - name: Upload plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: Project_18/tfplan
+
+  apply:
+    name: Apply (needs approval)
+    needs: plan
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: Project_18
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Download plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: Project_18
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform apply
+        run: terraform apply -input=false tfplan
