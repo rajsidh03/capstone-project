@@ -1,0 +1,51 @@
+#!/bin/bash
+# Runs the access tests as the EC2's own role and saves the output to the bucket
+export AWS_DEFAULT_REGION=ap-south-1
+BUCKET=${bucket}
+OUT=/var/log/p23-test.txt
+
+# wait until the role credentials are available
+for i in $(seq 1 30); do
+  aws sts get-caller-identity >/dev/null 2>&1 && break
+  sleep 5
+done
+sleep 15   # IAM changes can take a few seconds to apply
+
+{
+echo "=== Project 23: role test, run on the EC2 server at $(date -u) ==="
+
+echo
+echo "--- 1. Who am I? (an assumed ROLE, not a user) ---"
+aws sts get-caller-identity --query Arn --output text
+
+echo
+echo "--- 2. Access keys stored on this server? ---"
+ls /root/.aws 2>&1 | head -1
+
+echo
+echo "--- 3. ALLOWED: upload a file to the bucket ---"
+echo "hello from the EC2 role" > /tmp/hello.txt
+aws s3 cp /tmp/hello.txt s3://$BUCKET/test/hello.txt 2>&1
+
+echo
+echo "--- 4. ALLOWED: list the bucket ---"
+aws s3 ls s3://$BUCKET/test/ 2>&1
+
+echo
+echo "--- 5. ALLOWED: read the file back ---"
+aws s3 cp s3://$BUCKET/test/hello.txt - 2>&1
+
+echo
+echo "--- 6. DENIED: list all buckets in the account ---"
+aws s3 ls 2>&1
+
+echo
+echo "--- 7. DENIED: list IAM users ---"
+aws iam list-users 2>&1
+
+echo
+echo "--- 8. DENIED: list EC2 instances ---"
+aws ec2 describe-instances 2>&1
+} > $OUT 2>&1
+
+aws s3 cp $OUT s3://$BUCKET/results/test-output.txt
