@@ -1,17 +1,6 @@
-# Project 5: Secure Linux Server Permissions
+# Project 5: Linux Permissions
 
-Creates users and groups, restricts folder access with Linux permissions,
-and tests allowed and denied access for each user.
+I created the group `devs` and two users: `alice` (in `devs`) and `bob` (not in `devs`).
+The folder `/srv/project` is owned by `root:devs` with mode 770, so only the group has access.
 
-## Usage
-    bash setup_users.sh
-    bash test_access.sh 2>&1 | tee test-results.txt
-    bash cleanup.sh        # when finished
-
-## Design
-| User  | Groups     | dev (rw) | audit-logs (r) | public (r) |
-|-------|------------|----------|----------------|------------|
-| alice | developers | yes      | no             | yes        |
-| bob   | developers | yes      | no             | yes        |
-| carol | auditors   | no       | yes            | yes        |
-| eve   | none       | no       | no             | yes        |
+Tests: alice can write to and read the folder (allowed). bob gets "Permission denied" for both (denied).
