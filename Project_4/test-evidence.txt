@@ -1,19 +1,26 @@
-IAM user:    p4-s3-readonly-user-ff338d5b
-User ARN:    arn:aws:iam::590507089733:user/p4-s3-readonly-user-ff338d5b
-Test bucket: p4-test-bucket-ff338d5b
-Date:        Mon, Nov 23, 2026 11:08:46 PM
+IAM user:    p4-s3-readonly-user-b502eb31
+Test bucket: p4-test-bucket-b502eb31
+Date:        Wed Nov 25 07:59:32 UTC 2026 UTC
 
-===== 1. Policies attached to the user =====
+===== 1. The IAM user =====
+-----------------------------------------------------------------
+|                            GetUser                            |
++---------------------------------------------------------------+
+|  p4-s3-readonly-user-b502eb31                                 |
+|  arn:aws:iam::590507089733:user/p4-s3-readonly-user-b502eb31  |
++---------------------------------------------------------------+
+
+===== 2. Policy attached to the user =====
 ------------------------------------------------------------------------------
 |                          ListAttachedUserPolicies                          |
 +----------------------------------------------------------------------------+
 ||                             AttachedPolicies                             ||
 |+------------+-------------------------------------------------------------+|
-||  PolicyArn |  arn:aws:iam::590507089733:policy/p4-iam-s3-read-ff338d5b   ||
-||  PolicyName|  p4-iam-s3-read-ff338d5b                                    ||
+||  PolicyArn |  arn:aws:iam::590507089733:policy/p4-iam-s3-read-b502eb31   ||
+||  PolicyName|  p4-iam-s3-read-b502eb31                                    ||
 |+------------+-------------------------------------------------------------+|
 
-===== 2. The policy document =====
+===== 3. Policy document (built from the s3_read_actions variable) =====
 {
     "Statement": [
         {
@@ -24,8 +31,8 @@ Date:        Mon, Nov 23, 2026 11:08:46 PM
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::p4-test-bucket-ff338d5b/*",
-                "arn:aws:s3:::p4-test-bucket-ff338d5b"
+                "arn:aws:s3:::p4-test-bucket-b502eb31/*",
+                "arn:aws:s3:::p4-test-bucket-b502eb31"
             ],
             "Sid": "S3ReadOnlyTestBucket"
         }
@@ -33,13 +40,13 @@ Date:        Mon, Nov 23, 2026 11:08:46 PM
     "Version": "2012-10-17"
 }
 
-===== 3. IAM policy simulator: what may this user do? =====
-ACTION                   RESOURCE                                             EXPECTED      RESULT
-s3:GetObject             arn:aws:s3:::p4-test-bucket-ff338d5b/hello.txt       allowed       explicitDeny
-s3:ListBucket            arn:aws:s3:::p4-test-bucket-ff338d5b                 allowed       explicitDeny
-s3:PutObject             arn:aws:s3:::p4-test-bucket-ff338d5b/upload-test.txt implicitDeny  explicitDeny
-s3:DeleteObject          arn:aws:s3:::p4-test-bucket-ff338d5b/hello.txt       implicitDeny  explicitDeny
-s3:ListAllMyBuckets      *                                                    implicitDeny  explicitDeny
-ec2:DescribeInstances    *                                                    implicitDeny  explicitDeny
+===== 4. Policy simulator: what may this user do? =====
+ACTION                   RESOURCE                                           EXPECTED     RESULT
+s3:GetObject             arn:aws:s3:::p4-test-bucket-b502eb31/hello.txt     allowed      allowed
+s3:ListBucket            arn:aws:s3:::p4-test-bucket-b502eb31               allowed      allowed
+s3:PutObject             arn:aws:s3:::p4-test-bucket-b502eb31/upload-test.txt implicitDeny implicitDeny
+s3:DeleteObject          arn:aws:s3:::p4-test-bucket-b502eb31/hello.txt     implicitDeny implicitDeny
+s3:ListAllMyBuckets      *                                                  implicitDeny implicitDeny
+ec2:DescribeInstances    *                                                  implicitDeny implicitDeny
 
 Done. 'allowed' = permitted by the policy. 'implicitDeny' = not permitted.

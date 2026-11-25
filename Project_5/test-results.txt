@@ -1,0 +1,38 @@
+Access tests - Wed Nov 25 07:25:57 UTC 2026
+
+--- alice (developers) ---
+[PASS] alice  read dev notes                 expected ALLOW got ALLOW
+[PASS] alice  write in dev folder            expected ALLOW got ALLOW
+[PASS] alice  read public file               expected ALLOW got ALLOW
+[PASS] alice  read audit log                 expected DENY  got DENY 
+         -> cat: /srv/company/audit-logs/audit-2026.log: Permission denied
+[PASS] alice  browse bob's home              expected DENY  got DENY 
+         -> ls: cannot open directory '/home/bob': Permission denied
+[PASS] alice  run sudo                       expected DENY  got DENY 
+         -> sudo: a password is required
+
+--- bob (developers) ---
+[PASS] bob    read dev notes                 expected ALLOW got ALLOW
+[PASS] bob    write in dev folder            expected ALLOW got ALLOW
+[PASS] bob    read audit log                 expected DENY  got DENY 
+         -> cat: /srv/company/audit-logs/audit-2026.log: Permission denied
+
+--- carol (auditors) ---
+[PASS] carol  read audit log                 expected ALLOW got ALLOW
+[PASS] carol  write in audit-logs            expected DENY  got DENY 
+         -> touch: cannot touch '/srv/company/audit-logs/carol-test.txt': Permission denied
+[PASS] carol  list dev folder                expected DENY  got DENY 
+         -> ls: cannot open directory '/srv/company/dev': Permission denied
+[PASS] carol  write in dev folder            expected DENY  got DENY 
+         -> touch: cannot touch '/srv/company/dev/carol-test.txt': Permission denied
+
+--- eve (no group) ---
+[PASS] eve    read public file               expected ALLOW got ALLOW
+[PASS] eve    write in public folder         expected DENY  got DENY 
+         -> touch: cannot touch '/srv/company/public/eve-test.txt': Permission denied
+[PASS] eve    list dev folder                expected DENY  got DENY 
+         -> ls: cannot open directory '/srv/company/dev': Permission denied
+[PASS] eve    read audit log                 expected DENY  got DENY 
+         -> cat: /srv/company/audit-logs/audit-2026.log: Permission denied
+
+Result: 17 passed, 0 failed (total 17)
