@@ -1,0 +1,38 @@
+---
+- name: Configure the server
+  hosts: servers
+  become: true
+  vars:
+    app_name: p15-demo
+    app_env: production
+    app_dir: /opt/p15-demo
+
+  tasks:
+    - name: Ensure the tree package is installed
+      ansible.builtin.apt:
+        name: tree
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Create the application directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Deploy the configuration file from a template
+      ansible.builtin.template:
+        src: app.conf.j2
+        dest: "{{ app_dir }}/app.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Record config change
+
+  handlers:
+    - name: Record config change
+      ansible.builtin.debug:
+        msg: "Configuration file was updated"
