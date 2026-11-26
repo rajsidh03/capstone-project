@@ -21,3 +21,7 @@ control policy blocks iam:CreateAccessKey. The policy is therefore tested with
 the IAM policy simulator instead of a live login. If your account allows keys,
 set `create_access_key = true`; the secret is then stored in the git-ignored
 state file, so run `terraform destroy` when finished.
+<img width="1918" height="986" alt="Screenshot 2026-11-25 133450" src="https://github.com/user-attachments/assets/f1ff075c-5349-4575-ab5c-03c74e842eac" />
+<img width="1919" height="991" alt="Screenshot 2026-11-25 133339" src="https://github.com/user-attachments/assets/5dac417e-c0f1-4837-b53a-8b2995d15573" />
+
+
