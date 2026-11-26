@@ -11,6 +11,7 @@ This project contains a Docker-based web application.
 Learn Docker image creation and containerization.
 
 ## SS
-<img width="1914" height="941" alt="Screenshot 2026-11-24 153911" src="https://github.com/user-attachments/assets/1b9832db-43eb-4a6e-8c0a-ccc86235af11" />
-<img width="1912" height="842" alt="Screenshot 2026-11-24 153755" src="https://github.com/user-attachments/assets/dde65c9e-84d2-40d2-9c47-4b9628357ca6" />
+<img width="1916" height="875" alt="Screenshot 2026-11-25 200132" src="https://github.com/user-attachments/assets/cc02d82b-94ef-478b-a773-a8671c9df53e" />
+<img width="1907" height="1057" alt="Screenshot 2026-11-25 171540" src="https://github.com/user-attachments/assets/348207bb-8e03-4a88-be3a-5811964e4aae" />
+
 
